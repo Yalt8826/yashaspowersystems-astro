@@ -111,6 +111,85 @@ Then attach the custom domain under the Worker's **Settings → Domains & Routes
 
 ---
 
+## WhatsApp Cloud API webhook
+
+Endpoint: **`POST|GET /webhooks/whatsapp`**
+Source: [`src/pages/webhooks/whatsapp.ts`](src/pages/webhooks/whatsapp.ts)
+
+This is the only on-demand route in the project. Everything else is prerendered to static HTML —
+this one opts out with `export const prerender = false`, which is why the Cloudflare adapter is
+kept in `astro.config.ts`.
+
+**GET** is Meta's one-off verification handshake. It compares `hub.verify_token` against the
+stored secret and, only on a match, echoes `hub.challenge` back as plain text with a 200.
+
+**POST** is event delivery. It validates the `X-Hub-Signature-256` header — an HMAC-SHA256 of the
+**raw body** keyed with the Meta App Secret — then returns 200 immediately.
+
+### Two things that quietly break webhook implementations
+
+1. **The signature covers the raw bytes.** Parsing the JSON and re-stringifying changes
+   whitespace and key order, invalidating the hash. The handler calls `request.text()` once and
+   signs exactly that string.
+2. **`assets.not_found_handling` and Worker routing interact.** `run_worker_first: ["/webhooks/*"]`
+   in `wrangler.json` guarantees webhook requests reach the Worker instead of being resolved as
+   assets. Without it, delivery depends on Cloudflare's default "non-navigation requests invoke
+   the Worker" behaviour — which works, but silently 404s if that default ever changes. Meta
+   retries for 7 days and then drops the events.
+
+### Secrets
+
+Two Worker secrets, never in this repo:
+
+| Secret | Where it comes from |
+| --- | --- |
+| `WHATSAPP_VERIFY_TOKEN` | a long random string you invent (`openssl rand -hex 32`) |
+| `WHATSAPP_APP_SECRET` | Meta App Dashboard → App Settings → Basic → App Secret |
+
+Production (either works):
+
+```bash
+npx wrangler secret put WHATSAPP_VERIFY_TOKEN
+npx wrangler secret put WHATSAPP_APP_SECRET
+```
+
+or the dashboard: Worker → **Settings → Variables and Secrets → Add → Secret**.
+
+Local dev:
+
+```bash
+cp .dev.vars.example .dev.vars   # then fill in real values; .dev.vars is gitignored
+```
+
+### Meta App Dashboard configuration
+
+**App Dashboard → WhatsApp → Configuration** (or **Use cases → Customize → Configuration** for the
+"Connect with customers through WhatsApp" use case):
+
+| Field | Value |
+| --- | --- |
+| Callback URL | `https://yashaspowersystems.com/webhooks/whatsapp` |
+| Verify token | the same string you set as `WHATSAPP_VERIFY_TOKEN` |
+
+Save. Meta sends the GET immediately — if the panel saves and a field list appears, verification
+succeeded. If it refuses to save, the endpoint returned something other than 200 + challenge.
+
+### ⚠️ Known gap: payloads are not durably stored
+
+`persist()` currently writes structured entries to Workers Logs (observability is enabled in
+`wrangler.json`, so they're retained and searchable in the dashboard). That is **not** durable
+event storage.
+
+Meta does not expose historical webhooks — anything not captured is gone. Before relying on this
+in production, back `persist()` with a **KV namespace** or **D1 database**: create it, add the
+binding to `wrangler.json`, and write there inside the existing `waitUntil()` call so the 200 is
+never delayed.
+
+Also note Meta batches up to 1000 updates per POST and **retries on failure**, so the same message
+id can legitimately arrive more than once — de-duplicate on `messageIds` once storage exists.
+
+---
+
 ## Repo layout
 
 ```

@@ -1,0 +1,14 @@
+# Copy this file to `.dev.vars` (which is gitignored) and fill in real values.
+# `npm run dev` and `npm run preview` read it automatically.
+#
+#   cp .dev.vars.example .dev.vars
+#
+# NEVER commit `.dev.vars`.
+
+# A string you invent yourself. Paste the same value into the Meta App
+# Dashboard → WhatsApp → Configuration → "Verify token".
+WHATSAPP_VERIFY_TOKEN="change-me-to-a-long-random-string"
+
+# Meta App Dashboard → App Settings → Basic → App Secret.
+# Used to verify the X-Hub-Signature-256 header on every event POST.
+WHATSAPP_APP_SECRET="change-me-to-your-meta-app-secret"
