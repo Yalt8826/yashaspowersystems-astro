@@ -1,0 +1,86 @@
+---
+import { SITE, NAV } from '../site.config';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { title, description = SITE.tagline, noindex = false } = Astro.props;
+
+const pageTitle =
+  Astro.url.pathname === '/' ? SITE.name : `${title} · ${SITE.name}`;
+
+const canonical = new URL(Astro.url.pathname, SITE.domain).href;
+const currentPath =
+  Astro.url.pathname.replace(/\/+$/, '') || '/';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#161614" media="(prefers-color-scheme: dark)" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">{SITE.name}</a>
+        <nav class="site-nav" aria-label="Primary">
+          {
+            NAV.map((item) => (
+              <a
+                href={item.href}
+                aria-current={
+                  currentPath === item.href.replace(/\/+$/, '') ? 'page' : undefined
+                }
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="wrap">
+        <slot />
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <span>© {new Date().getFullYear()} {SITE.name}</span>
+        <span>
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          &nbsp;·&nbsp;
+          <a href="/privacy/">Privacy</a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>

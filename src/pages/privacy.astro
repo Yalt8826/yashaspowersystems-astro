@@ -1,0 +1,354 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+
+/*
+ * ───────────────────────────────────────────────────────────────────────────
+ *  SOURCE NOTE — this page reproduces the policy text supplied by Yashas
+ *  Power Systems on 2026-09-24, ported to Astro. Contact values marked
+ *  [BUSINESS …] in the source map to src/site.config.ts.
+ *
+ *  ⚠️ TWO CLAIMS IN THE SUPPLIED TEXT DO NOT MATCH WHAT THIS SITE ACTUALLY
+ *     DOES — resolve these before publishing (see README):
+ *       1. §11 says the website "may use cookies or similar technologies".
+ *          This site sets no cookies and has no authentication or preferences
+ *          storage. There is nothing to control in browser settings.
+ *       2. §10 lists "Analytics" among third-party services in use. No
+ *          analytics service is loaded on this site.
+ *     Both are hedged ("may"), so neither is strictly false — but a policy
+ *     that overstates collection is still inaccurate. Either soften the text
+ *     or remove the claims.
+ *
+ *  It is not legal advice.
+ * ───────────────────────────────────────────────────────────────────────────
+ */
+
+const host = new URL(SITE.domain).host;
+---
+
+<Base
+  title="Privacy Policy"
+  description={`How ${SITE.name} collects, uses, stores and protects information.`}
+>
+  <article class="prose">
+    <h1>Privacy Policy</h1>
+    <p class="muted small">
+      Last updated: {SITE.privacyUpdated} &nbsp;·&nbsp; Effective: {SITE.privacyUpdated}
+    </p>
+
+    <p>
+      {SITE.name} (&ldquo;{SITE.name}&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, or
+      &ldquo;our&rdquo;) respects your privacy and is committed to protecting the
+      personal and business information that we collect and process.
+    </p>
+
+    <p>
+      This Privacy Policy explains how {SITE.name} collects, uses, stores, and
+      protects information when you interact with our business, including when you
+      use our services, communicate with us through WhatsApp, visit our website, or
+      interact with our service and sales management platform, <strong>ServGrid</strong>.
+    </p>
+
+    <h2 id="s1">1. About {SITE.name}</h2>
+    <p>
+      {SITE.name} is a business engaged in the sale, installation, servicing,
+      maintenance, and support of UPS systems, batteries, power backup equipment, and
+      related products and services.
+    </p>
+    <p>
+      We use <strong>ServGrid</strong>, a business management platform, to help us
+      manage our customers, sales activities, service requests, technicians, service
+      jobs, and related business operations.
+    </p>
+
+    <h2 id="s2">2. Information We Collect</h2>
+    <p>
+      Depending on your interaction with {SITE.name}, we may collect the following
+      information.
+    </p>
+
+    <h3>Customer Information</h3>
+    <p>We may collect:</p>
+    <ul>
+      <li>Name</li>
+      <li>Phone number</li>
+      <li>Email address</li>
+      <li>Billing and service address</li>
+      <li>Company or organization name</li>
+      <li>Contact person details</li>
+      <li>Information about products or equipment</li>
+      <li>Service and maintenance history</li>
+      <li>Service requests and complaints</li>
+      <li>Other information that you voluntarily provide to us</li>
+    </ul>
+
+    <h3>Sales and Service Information</h3>
+    <p>
+      When you purchase products or request services from us, we may collect
+      information relating to:
+    </p>
+    <ul>
+      <li>Products purchased</li>
+      <li>UPS and battery details</li>
+      <li>Installation information</li>
+      <li>Service and maintenance records</li>
+      <li>Service requests</li>
+      <li>Technician visits</li>
+      <li>Warranty information</li>
+      <li>Quotations and sales records</li>
+      <li>Invoices and payment-related business records</li>
+      <li>Communication and service notes</li>
+    </ul>
+
+    <h3>Employee and Technician Information</h3>
+    <p>
+      For our employees and authorized personnel, we may process information
+      necessary to manage sales and service operations, including:
+    </p>
+    <ul>
+      <li>Name</li>
+      <li>Contact information</li>
+      <li>Employee or staff details</li>
+      <li>Assigned service jobs</li>
+      <li>Sales activities</li>
+      <li>Work-related records</li>
+      <li>Attendance or operational information</li>
+      <li>Location information where location-based features have been enabled</li>
+    </ul>
+
+    <h3>Technical Information</h3>
+    <p>
+      When you interact with our online services, we may collect limited technical
+      information such as:
+    </p>
+    <ul>
+      <li>IP address</li>
+      <li>Browser type</li>
+      <li>Device information</li>
+      <li>Operating system</li>
+      <li>Application information</li>
+      <li>Log and diagnostic information</li>
+    </ul>
+
+    <h2 id="s3">3. Information Collected Through WhatsApp</h2>
+    <p>
+      {SITE.name} may use <strong>WhatsApp</strong> to communicate with customers
+      regarding products, quotations, service requests, maintenance, appointments,
+      support, and other business-related matters.
+    </p>
+    <p>
+      When you communicate with us through WhatsApp, we may process information such
+      as:
+    </p>
+    <ul>
+      <li>Your WhatsApp phone number</li>
+      <li>Your name or WhatsApp profile information where available</li>
+      <li>Messages you send to us</li>
+      <li>Images, documents, or other files you send to us</li>
+      <li>Information contained in communications</li>
+      <li>Message and communication metadata</li>
+    </ul>
+    <p>
+      We use this information to respond to your requests, provide customer support,
+      coordinate services, and maintain relevant business records.
+    </p>
+    <p>
+      WhatsApp communications are also subject to the applicable terms and privacy
+      policies of WhatsApp and Meta.
+    </p>
+
+    <h2 id="s4">4. How We Use Your Information</h2>
+    <p>We may use the information we collect to:</p>
+    <ul>
+      <li>Provide products and services</li>
+      <li>Respond to customer enquiries</li>
+      <li>Process sales and service requests</li>
+      <li>Schedule installations and service visits</li>
+      <li>Assign service jobs to technicians</li>
+      <li>Maintain customer and equipment records</li>
+      <li>Provide maintenance and technical support</li>
+      <li>
+        Communicate with customers through WhatsApp, phone, email, or other
+        appropriate channels
+      </li>
+      <li>Manage quotations, invoices, and business transactions</li>
+      <li>Manage our sales and service operations</li>
+      <li>Improve our products and services</li>
+      <li>Maintain the security of our systems</li>
+      <li>Prevent unauthorized access, fraud, or misuse</li>
+      <li>Comply with applicable legal and regulatory requirements</li>
+    </ul>
+
+    <h2 id="s5">5. ServGrid</h2>
+    <p>
+      {SITE.name} uses <strong>ServGrid</strong> as a software platform for managing
+      sales, customers, service operations, technicians, and related business
+      activities.
+    </p>
+    <p>
+      Information entered into ServGrid may include customer, employee, sales,
+      service, equipment, and communication information required for our business
+      operations.
+    </p>
+    <p>
+      ServGrid is used as a business management tool on behalf of {SITE.name}. Access
+      to information within the system is controlled according to user roles and
+      business requirements.
+    </p>
+
+    <h2 id="s6">6. How We Share Information</h2>
+    <p>
+      We may share information when necessary to provide our products and services or
+      operate our business.
+    </p>
+    <p>Information may be shared with:</p>
+    <ul>
+      <li>Authorized employees and technicians of {SITE.name}</li>
+      <li>
+        Service providers and technology providers that support our business
+        operations
+      </li>
+      <li>
+        Authorized personnel involved in sales, installation, maintenance, and
+        customer support
+      </li>
+      <li>Communication providers, including WhatsApp/Meta, where applicable</li>
+      <li>
+        Government authorities or other parties where disclosure is required by law
+      </li>
+    </ul>
+    <p>We do not sell customer personal information to third parties.</p>
+
+    <h2 id="s7">7. Data Security</h2>
+    <p>
+      We take reasonable technical and organizational measures to protect personal
+      and business information against unauthorized access, alteration, disclosure,
+      or destruction.
+    </p>
+    <p>
+      Access to customer and business information is restricted to authorized
+      personnel based on their responsibilities.
+    </p>
+    <p>
+      However, no electronic storage or transmission system can be guaranteed to be
+      completely secure.
+    </p>
+
+    <h2 id="s8">8. Data Retention</h2>
+    <p>We retain information for as long as reasonably necessary to:</p>
+    <ul>
+      <li>Provide our products and services</li>
+      <li>Maintain customer and service records</li>
+      <li>Manage warranties and maintenance</li>
+      <li>Maintain business and financial records</li>
+      <li>Comply with legal and regulatory requirements</li>
+      <li>Resolve disputes</li>
+      <li>Protect our legitimate business interests</li>
+    </ul>
+    <p>
+      The period for which information is retained may vary depending on the type of
+      information and the purpose for which it was collected.
+    </p>
+
+    <h2 id="s9">9. Your Rights and Requests</h2>
+    <p>
+      Depending on applicable law, you may have rights regarding your personal
+      information, including the right to request access to, correction of, or
+      deletion of certain information.
+    </p>
+    <p>
+      If you would like to make a privacy-related request, please contact us using
+      the contact details provided below.
+    </p>
+    <p>We may need to verify your identity before processing certain requests.</p>
+    <p>
+      Some information may need to be retained where required by law or where
+      necessary for legitimate business purposes.
+    </p>
+
+    <h2 id="s10">10. Third-Party Services</h2>
+    <p>
+      We may use third-party services to support our business operations, including
+      services for:
+    </p>
+    <ul>
+      <li>Cloud hosting and infrastructure</li>
+      <li>Communication and messaging</li>
+      <li>Authentication</li>
+      <li>Security</li>
+      <li>Analytics</li>
+      <li>Software and business management</li>
+    </ul>
+    <p>
+      These third-party providers may process information on our behalf as necessary
+      to provide their services.
+    </p>
+    <p>
+      This website is hosted and delivered by <strong>Cloudflare, Inc.</strong>, which
+      provides DNS, TLS certificates, and content delivery and therefore processes
+      request data on our behalf. Cloudflare&rsquo;s own handling of that data is
+      described in its
+      <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">privacy policy</a>.
+    </p>
+
+    <h2 id="s11">11. Cookies and Website Technologies</h2>
+    <p>
+      Our website may use cookies or similar technologies for purposes such as:
+    </p>
+    <ul>
+      <li>Website functionality</li>
+      <li>Security</li>
+      <li>Authentication</li>
+      <li>Preferences</li>
+      <li>Analytics and performance</li>
+    </ul>
+    <p>
+      You may control cookies through your browser settings. Disabling certain cookies
+      may affect some website functionality.
+    </p>
+
+    <h2 id="s12">12. Children&rsquo;s Privacy</h2>
+    <p>
+      Our services are intended for businesses and general customers and are not
+      directed toward children under the age of 13.
+    </p>
+    <p>
+      We do not knowingly collect personal information from children under 13.
+    </p>
+
+    <h2 id="s13">13. Changes to This Privacy Policy</h2>
+    <p>
+      We may update this Privacy Policy from time to time to reflect changes to our
+      business, services, technology, or applicable laws.
+    </p>
+    <p>
+      When we make changes, we will update the &ldquo;Last Updated&rdquo; date
+      displayed at the top of this Privacy Policy.
+    </p>
+
+    <h2 id="s14">14. Contact Us</h2>
+    <p>
+      If you have questions about this Privacy Policy or how {SITE.name} handles your
+      information, you can contact us at:
+    </p>
+    <p>
+      <strong>{SITE.legalEntity}</strong><br />
+      <strong>Email:</strong> <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
+      {
+        SITE.phone && (
+          <>
+            <strong>Phone:</strong>{' '}
+            <a href={`tel:${SITE.phone.replace(/[^\d+]/g, '')}`}>{SITE.phone}</a>
+            <br />
+          </>
+        )
+      }
+      {SITE.address && (<><strong>Address:</strong> {SITE.address}<br /></>)}
+      <strong>Website:</strong> <a href={SITE.domain}>{host}</a>
+    </p>
+
+    <hr />
+
+    <p class="muted small"><strong>Effective Date:</strong> {SITE.privacyUpdated}</p>
+  </article>
+</Base>

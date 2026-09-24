@@ -1,64 +1,167 @@
-# Astro Starter Kit: Blog
+# yashaspowersystems-astro
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/astro-blog-starter-template)
+Website for **Yashas Power Systems** (yashaspowersystems.com) — built with **Astro** and deployed
+to **Cloudflare Workers** using [Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/).
 
-![Astro Template Preview](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+Two pages: a home page and a full 14-section privacy policy. Add more by dropping a file into
+`src/pages/`.
 
-<!-- dash-content-start -->
+This repo replaces the earlier `yashaspowersystems-site` (which was a Cloudflare **Pages**
+project). This one targets **Workers**, which is what Cloudflare recommends for new projects.
 
-Create a blog with Astro and deploy it on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+---
 
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-- ✅ Built-in Observability logging
-
-<!-- dash-content-end -->
-
-## Getting Started
-
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+## Quick start
 
 ```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-starter-template
+npm install
+npm run dev        # http://localhost:4321
+npm run build      # outputs to dist/
+npm run preview    # build + run the real Worker locally via wrangler dev
+npm run deploy     # build + deploy to Cloudflare Workers
 ```
 
-A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
+`npm run preview` is the honest test — it runs the actual Worker with the real assets config,
+so 404 handling and headers behave the same as production.
 
-## 🚀 Project Structure
+Requires Node >= 22 (declared in `package.json` engines).
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+---
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## ⚠️ Replace the placeholder copy before publishing
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+Site-wide values come from **one file**: [`src/site.config.ts`](src/site.config.ts). It feeds the
+header, footer, `<title>`, canonical URLs, sitemap, and the privacy policy.
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Field | Current value |
+| --- | --- |
+| `name` | `Yashas Power Systems` |
+| `domain` | `https://yashaspowersystems.com` |
+| `tagline` | `UPS systems, sales and service.` — **inferred, confirm it** |
+| `email` | `ypsapcups@gmail.com` |
+| `phone` | **EMPTY** — privacy policy omits the line until set |
+| `address` | **EMPTY** — privacy policy omits the line until set |
+| `legalEntity` | `Yashas Power Systems` — update if the registered name differs |
+| `country` | `India` |
+| `privacyUpdated` | `2026-09-24` |
 
-## 🧞 Commands
+Also replace the **placeholder body copy** in `src/pages/index.astro` — the "What we do" and
+"Get in touch" sections are inferred, not confirmed claims. Do not publish them as-is.
 
-All commands are run from the root of the project, from a terminal:
+### ⚠️ Two claims in the privacy policy don't describe this website
 
-| Command                           | Action                                           |
-| :-------------------------------- | :----------------------------------------------- |
-| `npm install`                     | Installs dependencies                            |
-| `npm run dev`                     | Starts local dev server at `localhost:4321`      |
-| `npm run build`                   | Build your production site to `./dist/`          |
-| `npm run preview`                 | Preview your build locally, before deploying     |
-| `npm run astro ...`               | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help`         | Get help using the Astro CLI                     |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare        |
-| `npm wrangler tail`               | View real-time logs for all Workers              |
+The policy text was supplied by the business and ported verbatim. Both items below are hedged with
+"may", so neither is strictly false — but a policy that overstates collection is still inaccurate:
 
-## 👀 Want to learn more?
+| Section | Claim | Reality |
+| --- | --- | --- |
+| §11 Cookies and Website Technologies | site "may use cookies or similar technologies" for functionality, security, **authentication**, preferences, analytics | sets **no cookies** — no auth, no preferences storage. Nothing for a visitor to control |
+| §10 Third-Party Services | lists **Analytics** among services in use | no analytics is loaded anywhere in this repo |
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Sections 1–9 and 12–14 accurately describe the business (ServGrid, WhatsApp, technician records)
+and should stay as written.
 
-## Credit
+> The privacy policy is **not legal advice**.
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+---
+
+## Deployment (Cloudflare Workers)
+
+Config lives in [`wrangler.json`](wrangler.json):
+
+```jsonc
+"main": "./dist/_worker.js/index.js",     // worker entry generated by the Astro adapter
+"assets": {
+  "directory": "./dist",                  // the build output IS the site
+  "binding": "ASSETS",
+  "not_found_handling": "404-page"        // serve nearest 404.html with a 404 status
+}
+```
+
+### Why `not_found_handling` is not optional here
+
+This repo uses `@astrojs/cloudflare`, so there **is** a Worker script. Per Cloudflare's docs,
+`_headers` rules are *not* applied to responses generated by Worker code. Setting
+`not_found_handling` — combined with the `2025-10-08` compatibility date, which is past the
+`2025-04-01` navigation threshold — means **navigation requests are served straight from assets
+and never invoke the Worker**. That's what keeps the security headers in `_headers` applied.
+
+Remove it and you get the default Workers behaviour instead: unmatched URLs won't render
+`404.html`.
+
+`html_handling` is left at its default (`auto-trailing-slash`), which serves `privacy/index.html`
+at `/privacy/` and a bare `privacy.html` at `/privacy`.
+
+### Deploying
+
+Either deploy directly:
+
+```bash
+npm run deploy
+```
+
+Or connect the repo for automatic deploys (Workers **Builds**, the Workers equivalent of Pages'
+Git integration): Cloudflare dashboard → Workers & Pages → your Worker → **Settings → Builds →
+Connect**. Push to `main` deploys; other branches get preview URLs.
+
+> **The Worker name in the dashboard must match `name` in `wrangler.json`** (`yashaspowersystems-astro`)
+> or the build fails outright.
+
+Then attach the custom domain under the Worker's **Settings → Domains & Routes**.
+
+---
+
+## Repo layout
+
+```
+yashaspowersystems-astro/
+├── astro.config.ts          # reads `site` from src/site.config.ts; keeps the CF adapter
+├── wrangler.json            # Cloudflare Workers config
+├── package.json
+├── tsconfig.json
+├── worker-configuration.d.ts
+├── public/                  # copied to dist/ verbatim
+│   ├── .assetsignore        # keeps _worker.js/_headers/_redirects OUT of uploaded assets
+│   ├── _headers             # HTTP response headers
+│   ├── robots.txt
+│   └── favicon.svg
+└── src/
+    ├── site.config.ts       # ← SINGLE SOURCE OF TRUTH, edit this
+    ├── env.d.ts
+    ├── styles/global.css    # design tokens + base styles
+    ├── layouts/Base.astro   # <head>, header nav, footer
+    └── pages/
+        ├── index.astro      # → /
+        ├── privacy.astro    # → /privacy/
+        └── 404.astro        # → /404.html
+```
+
+### Adding a page
+
+Create `src/pages/about.astro` and it becomes `/about/` at build time. Then add it to the `NAV`
+array in `src/site.config.ts`. Keep nav links **trailing-slash** (`/about/`, not `/about`) —
+Astro builds pages in directory format, so `/about` would cost an extra redirect.
+
+---
+
+## Cloudflare-specific files
+
+### `public/_headers`
+
+Ships as `dist/_headers`. It is **not** served as a web page — Workers parses it and applies the
+rules to static asset responses. Limits: 100 rules, 2000 chars per line.
+
+Because the Astro adapter generates a Worker script, these headers apply to asset responses
+(navigation requests included, given `not_found_handling` is set) but **not** to anything the
+Worker generates itself. If you add SSR routes later, set security headers in that code too.
+
+### `public/.assetsignore`
+
+Keeps build machinery out of the uploaded assets: `_worker.js`, `_routes.json`, `_headers`,
+`_redirects`. These are consumed by the platform rather than served. Don't delete it.
+
+### `404.html`
+
+`src/pages/404.astro` builds to a top-level `dist/404.html`, which `not_found_handling` serves for
+unmatched URLs. On Pages this file was *load-bearing* to avoid SPA fallback; on Workers the
+behaviour is governed by `not_found_handling` instead — but the file still needs to exist.
